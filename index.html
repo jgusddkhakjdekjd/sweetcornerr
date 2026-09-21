@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Cozy Cabin Safe Haven</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Playfair Display', Georgia, serif;
+            background-color: #0d0a08;
+            color: #f3e9dc;
+        }
+
+        /* DIRECT LOCAL CABIN BACKGROUND */
+        .cabin-bg {
+            position: absolute;
+            inset: 0;
+            background-image: url('cabin.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 1;
+        }
+
+        /* Warm ambient glow overlay */
+        .cabin-overlay {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 18% 68%, rgba(255, 140, 0, 0.22) 0%, rgba(15, 10, 8, 0.45) 50%, rgba(5, 3, 2, 0.8) 100%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Fireplace flame canvas overlay */
+        #fireCanvas {
+            position: absolute;
+            left: 5%;
+            top: 50%;
+            width: 22%;
+            height: 30%;
+            z-index: 3;
+            pointer-events: none;
+            mix-blend-mode: screen;
+            opacity: 0.85;
+        }
+
+        /* Interactive Envelope floating on desk */
+        .envelope-container {
+            position: absolute;
+            bottom: 22%;
+            right: 22%;
+            z-index: 10;
+            cursor: pointer;
+            transition: transform 0.4s ease, filter 0.4s ease;
+            animation: gentleFloat 4s ease-in-out infinite;
+        }
+
+        .envelope-container:hover {
+            transform: scale(1.08) translateY(-6px);
+            filter: drop-shadow(0 0 20px rgba(230, 160, 80, 0.8));
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(1deg); }
+        }
+
+        /* Amber parchment modal letter */
+        .amber-parchment {
+            background: linear-gradient(135deg, #2b1a0e 0%, #1c1008 100%);
+            border: 1px solid rgba(212, 163, 89, 0.4);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.9), inset 0 0 30px rgba(212, 163, 89, 0.15);
+            color: #f0e2d0;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(20, 10, 5, 0.5);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(212, 163, 89, 0.4);
+            border-radius: 4px;
+        }
+
+        /* Hand-drawn flower canvas */
+        #flowerCanvas {
+            width: 320px;
+            height: 340px;
+        }
+    </style>
+</head>
+<body class="relative flex items-center justify-center">
+
+    <!-- AUDIO PLAYER (Loops song.mp3 automatically) -->
+    <audio id="bgSong" loop preload="auto">
+        <source src="song.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- CABIN BACKGROUND IMAGE -->
+    <div class="cabin-bg"></div>
+
+    <!-- WARM AMBIENT GLOW -->
+    <div class="cabin-overlay"></div>
+
+    <!-- FIREPLACE ANIMATION CANVAS -->
+    <canvas id="fireCanvas"></canvas>
+
+    <!-- FLOATING ENVELOPE BUTTON -->
+    <div id="envelopeBtn" class="envelope-container flex flex-col items-center" onclick="openLetter()">
+        <div class="bg-amber-950/80 text-amber-200 text-xs px-3 py-1 rounded-full border border-amber-500/40 shadow-lg mb-2 backdrop-blur-md font-sans tracking-widest uppercase">
+            open me ♥
+        </div>
+        <div class="w-16 h-12 bg-amber-900/90 border-2 border-amber-600/70 rounded-md shadow-2xl flex items-center justify-center relative overflow-hidden backdrop-blur-sm">
+            <div class="absolute inset-0 bg-gradient-to-br from-amber-700/30 to-transparent"></div>
+            <svg class="w-8 h-8 text-amber-300 transform -rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+            </svg>
+        </div>
+    </div>
+
+    <!-- LETTER MODAL -->
+    <div id="letterModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-700">
+        
+        <!-- PAGE 1: 1920s RAW LETTER -->
+        <div id="page1" class="amber-parchment w-full max-w-xl p-8 md:p-10 rounded-lg relative transform scale-95 transition-all duration-500">
+            <h2 class="font-['Cinzel'] text-xl md:text-2xl text-amber-400 mb-6 tracking-wider text-center border-b border-amber-800/50 pb-3">
+                To My Darling
+            </h2>
+            <div class="space-y-4 text-base md:text-lg leading-relaxed italic custom-scrollbar max-h-[55vh] overflow-y-auto pr-2 text-amber-100/90">
+                <p>I built this warm corner of the world just for you so whenever the noise of everything gets too loud you can step inside and rest your head</p>
+                <p>You carry so much with such grace even on the days when school sucks the soul right out of you I see how hard you work and I see the pure sweetness of your heart</p>
+                <p>My only wish in this life is to bring that light right back into your eyes to make you smile when you are tired to remind you that you never have to walk through any of it alone</p>
+                <p>You are my quiet space and my favorite thought and I love you more deeply than any words on paper could ever hold</p>
+            </div>
+            
+            <div class="mt-8 flex justify-end items-center">
+                <button onclick="goToPage2()" class="flex items-center space-x-2 text-amber-300 hover:text-amber-100 font-['Cinzel'] text-sm tracking-widest uppercase transition-colors group">
+                    <span>Read Next</span>
+                    <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- PAGE 2: DRAWN FLOWERS & FINAL SAFE HAVEN MESSAGE -->
+        <div id="page2" class="amber-parchment w-full max-w-xl p-8 md:p-10 rounded-lg relative hidden flex-col items-center text-center transform scale-95 transition-all duration-500">
+            
+            <!-- CANVAS FOR HAND-DRAWN ROSE BOUQUET -->
+            <canvas id="flowerCanvas" class="mb-4"></canvas>
+
+            <h3 id="flowerCaption" class="font-['Cinzel'] text-lg md:text-xl text-amber-300 opacity-0 transition-opacity duration-1000 tracking-wider">
+                this is for you my darling
+            </h3>
+
+            <div id="finalMessage" class="mt-6 opacity-0 transition-opacity duration-1000 space-y-3 text-amber-100/90 italic border-t border-amber-800/40 pt-4">
+                <p class="text-base md:text-lg">
+                    Whenever you feel like the world is falling apart, remember you can always come back here and feel my love right next to you.
+                </p>
+                <p class="font-['Cinzel'] text-amber-400 not-italic text-sm tracking-widest pt-2">
+                    ALWAYS & FOREVER YOURS
+                </p>
+            </div>
+
+            <button onclick="closeModal()" class="mt-6 text-xs text-amber-500/70 hover:text-amber-300 tracking-widest uppercase transition-colors">
+                [ return to cabin ]
+            </button>
+        </div>
+
+    </div>
+
+    <script>
+        // Start background music on user's first click
+        let musicStarted = false;
+        function ensureAudioPlaying() {
+            if (!musicStarted) {
+                const audio = document.getElementById('bgSong');
+                audio.play().catch(e => console.log('Audio wait for interaction:', e));
+                musicStarted = true;
+            }
+        }
+        document.body.addEventListener('click', ensureAudioPlaying, { once: true });
+
+        // Fireplace Particle Animation
+        const fireCanvas = document.getElementById('fireCanvas');
+        const fireCtx = fireCanvas.getContext('2d');
+
+        function resizeFireCanvas() {
+            fireCanvas.width = fireCanvas.offsetWidth;
+            fireCanvas.height = fireCanvas.offsetHeight;
+        }
+        window.addEventListener('resize', resizeFireCanvas);
+        resizeFireCanvas();
+
+        const particles = [];
+        for (let i = 0; i < 45; i++) {
+            particles.push({
+                x: Math.random() * fireCanvas.width,
+                y: fireCanvas.height + Math.random() * 20,
+                radius: Math.random() * 12 + 4,
+                color: `hsla(${Math.random() * 35 + 10}, 100%, 50%, ${Math.random() * 0.7 + 0.3})`,
+                vx: (Math.random() - 0.5) * 1.2,
+                vy: -Math.random() * 2 - 1,
+                life: Math.random() * 60 + 20
+            });
+        }
+
+        function animateFire() {
+            fireCtx.clearRect(0, 0, fireCanvas.width, fireCanvas.height);
+            
+            particles.forEach((p) => {
+                fireCtx.beginPath();
+                fireCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                fireCtx.fillStyle = p.color;
+                fireCtx.shadowBlur = 15;
+                fireCtx.shadowColor = '#ff6600';
+                fireCtx.fill();
+
+                p.x += p.vx;
+                p.y += p.vy;
+                p.radius *= 0.96;
+                p.life--;
+
+                if (p.life <= 0 || p.radius < 0.5) {
+                    p.x = fireCanvas.width * 0.3 + Math.random() * (fireCanvas.width * 0.4);
+                    p.y = fireCanvas.height;
+                    p.radius = Math.random() * 12 + 4;
+                    p.color = `hsla(${Math.random() * 35 + 10}, 100%, 50%, ${Math.random() * 0.7 + 0.3})`;
+                    p.vx = (Math.random() - 0.5) * 1.2;
+                    p.vy = -Math.random() * 2 - 1;
+                    p.life = Math.random() * 60 + 20;
+                }
+            });
+
+            requestAnimationFrame(animateFire);
+        }
+        animateFire();
+
+        // Open Letter Modal
+        function openLetter() {
+            ensureAudioPlaying();
+            const modal = document.getElementById('letterModal');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.classList.add('opacity-100');
+            document.getElementById('envelopeBtn').classList.add('hidden');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('letterModal');
+            modal.classList.remove('opacity-100');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                document.getElementById('envelopeBtn').classList.remove('hidden');
+            }, 500);
+        }
+
+        // Transition from Letter to Flower Canvas
+        function goToPage2() {
+            const p1 = document.getElementById('page1');
+            const p2 = document.getElementById('page2');
+            
+            p1.classList.add('hidden');
+            p2.classList.remove('hidden');
+            p2.classList.add('flex');
+
+            setTimeout(() => {
+                startRoseDrawing();
+            }, 300);
+        }
+
+        // ORGANIC ROSE BOUQUET DRAWING ANIMATION
+        function startRoseDrawing() {
+            const canvas = document.getElementById('flowerCanvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 320;
+            canvas.height = 340;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.lineWidth = 2.5;
+            ctx.lineCap = 'round';
+
+            // Draw Curved Stems
+            function drawStems() {
+                let progress = 0;
+                const timer = setInterval(() => {
+                    progress += 0.05;
+                    ctx.strokeStyle = '#3a5a40';
+                    
+                    // Center stem
+                    ctx.beginPath();
+                    ctx.moveTo(160, 300);
+                    ctx.quadraticCurveTo(160, 220, 160, 150);
+                    ctx.stroke();
+
+                    // Left stem
+                    ctx.beginPath();
+                    ctx.moveTo(160, 300);
+                    ctx.quadraticCurveTo(130, 230, 110, 160);
+                    ctx.stroke();
+
+                    // Right stem
+                    ctx.beginPath();
+                    ctx.moveTo(160, 300);
+                    ctx.quadraticCurveTo(190, 230, 210, 160);
+                    ctx.stroke();
+
+                    if (progress >= 1) {
+                        clearInterval(timer);
+                        drawRibbon();
+                        drawRoses();
+                    }
+                }, 30);
+            }
+
+            // Draw Ribbon Bow
+            function drawRibbon() {
+                ctx.strokeStyle = '#d4a373';
+                ctx.fillStyle = 'rgba(212, 163, 115, 0.3)';
+                
+                ctx.beginPath();
+                ctx.arc(160, 260, 10, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(160, 260);
+                ctx.quadraticCurveTo(140, 280, 135, 310);
+                ctx.moveTo(160, 260);
+                ctx.quadraticCurveTo(180, 280, 185, 310);
+                ctx.stroke();
+            }
+
+            // Draw Detailed Rose Blossoms
+            function drawRoses() {
+                const rosePositions = [
+                    { x: 160, y: 130, r: 28 }, // Center
+                    { x: 110, y: 145, r: 24 }, // Left
+                    { x: 210, y: 145, r: 24 }, // Right
+                    { x: 135, y: 110, r: 22 }, // Upper Left
+                    { x: 185, y: 110, r: 22 }  // Upper Right
+                ];
+
+                let roseIdx = 0;
+
+                function drawNextRose() {
+                    if (roseIdx >= rosePositions.length) {
+                        // Reveal Caption
+                        setTimeout(() => {
+                            const caption = document.getElementById('flowerCaption');
+                            caption.classList.remove('opacity-0');
+                            caption.classList.add('opacity-100');
+                        }, 500);
+
+                        // Reveal Final Message after 3 seconds
+                        setTimeout(() => {
+                            const finalMsg = document.getElementById('finalMessage');
+                            finalMsg.classList.remove('opacity-0');
+                            finalMsg.classList.add('opacity-100');
+                        }, 3000);
+                        return;
+                    }
+
+                    const rose = rosePositions[roseIdx];
+                    let layer = 0;
+
+                    const roseInterval = setInterval(() => {
+                        ctx.strokeStyle = '#e63946';
+                        ctx.fillStyle = 'rgba(230, 57, 70, 0.15)';
+
+                        ctx.beginPath();
+                        ctx.arc(rose.x, rose.y, (rose.r / 4) * (layer + 1), 0, Math.PI * 2);
+                        ctx.stroke();
+                        ctx.fill();
+
+                        // Inner Petal Swirls
+                        ctx.strokeStyle = '#ff758f';
+                        ctx.beginPath();
+                        ctx.arc(rose.x - 2, rose.y - 2, (rose.r / 6) * (layer + 1), 0.5, Math.PI * 1.5);
+                        ctx.stroke();
+
+                        layer++;
+                        if (layer >= 4) {
+                            clearInterval(roseInterval);
+                            roseIdx++;
+                            setTimeout(drawNextRose, 150);
+                        }
+                    }, 80);
+                }
+
+                drawNextRose();
+            }
+
+            drawStems();
+        }
+
+        window.onload = function() {
+            resizeFireCanvas();
+        };
+    </script>
+</body>
+</html>

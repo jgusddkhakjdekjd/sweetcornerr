@@ -7,21 +7,21 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
     <style>
-        body, html {
+        html, body {
             margin: 0;
             padding: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             overflow: hidden;
-            font-family: 'Playfair Display', Georgia, serif;
-            background-color: #0d0a08;
+            background-color: #0d0a08 !important;
             color: #f3e9dc;
+            font-family: 'Playfair Display', Georgia, serif;
         }
 
-        /* DIRECT LOCAL CABIN BACKGROUND */
         .cabin-bg {
             position: absolute;
             inset: 0;
+            background-color: #0d0a08;
             background-image: url('cabin.jpg');
             background-size: cover;
             background-position: center;
@@ -29,16 +29,14 @@
             z-index: 1;
         }
 
-        /* Warm ambient glow overlay */
         .cabin-overlay {
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at 18% 68%, rgba(255, 140, 0, 0.22) 0%, rgba(15, 10, 8, 0.45) 50%, rgba(5, 3, 2, 0.8) 100%);
+            background: radial-gradient(circle at 18% 68%, rgba(255, 140, 0, 0.25) 0%, rgba(15, 10, 8, 0.5) 50%, rgba(5, 3, 2, 0.85) 100%);
             z-index: 2;
             pointer-events: none;
         }
 
-        /* Fireplace flame canvas overlay */
         #fireCanvas {
             position: absolute;
             left: 5%;
@@ -51,14 +49,12 @@
             opacity: 0.85;
         }
 
-        /* Interactive Envelope floating on desk */
         .envelope-container {
             position: absolute;
             bottom: 22%;
             right: 22%;
             z-index: 10;
             cursor: pointer;
-            transition: transform 0.4s ease, filter 0.4s ease;
             animation: gentleFloat 4s ease-in-out infinite;
         }
 
@@ -72,11 +68,10 @@
             50% { transform: translateY(-10px) rotate(1deg); }
         }
 
-        /* Amber parchment modal letter */
         .amber-parchment {
             background: linear-gradient(135deg, #2b1a0e 0%, #1c1008 100%);
             border: 1px solid rgba(212, 163, 89, 0.4);
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.9), inset 0 0 30px rgba(212, 163, 89, 0.15);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.95), inset 0 0 30px rgba(212, 163, 89, 0.15);
             color: #f0e2d0;
         }
 
@@ -91,32 +86,24 @@
             border-radius: 4px;
         }
 
-        /* Hand-drawn flower canvas */
         #flowerCanvas {
             width: 320px;
             height: 340px;
         }
     </style>
 </head>
-<body class="relative flex items-center justify-center">
+<body class="relative flex items-center justify-center bg-black">
 
-    <!-- AUDIO PLAYER (Loops song.mp3 automatically) -->
     <audio id="bgSong" loop preload="auto">
         <source src="song.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- CABIN BACKGROUND IMAGE -->
     <div class="cabin-bg"></div>
-
-    <!-- WARM AMBIENT GLOW -->
     <div class="cabin-overlay"></div>
-
-    <!-- FIREPLACE ANIMATION CANVAS -->
     <canvas id="fireCanvas"></canvas>
 
-    <!-- FLOATING ENVELOPE BUTTON -->
     <div id="envelopeBtn" class="envelope-container flex flex-col items-center" onclick="openLetter()">
-        <div class="bg-amber-950/80 text-amber-200 text-xs px-3 py-1 rounded-full border border-amber-500/40 shadow-lg mb-2 backdrop-blur-md font-sans tracking-widest uppercase">
+        <div class="bg-amber-950/90 text-amber-200 text-xs px-3 py-1 rounded-full border border-amber-500/40 shadow-lg mb-2 backdrop-blur-md font-sans tracking-widest uppercase">
             open me ♥
         </div>
         <div class="w-16 h-12 bg-amber-900/90 border-2 border-amber-600/70 rounded-md shadow-2xl flex items-center justify-center relative overflow-hidden backdrop-blur-sm">
@@ -127,10 +114,8 @@
         </div>
     </div>
 
-    <!-- LETTER MODAL -->
-    <div id="letterModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-700">
+    <div id="letterModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-700">
         
-        <!-- PAGE 1: 1920s RAW LETTER -->
         <div id="page1" class="amber-parchment w-full max-w-xl p-8 md:p-10 rounded-lg relative transform scale-95 transition-all duration-500">
             <h2 class="font-['Cinzel'] text-xl md:text-2xl text-amber-400 mb-6 tracking-wider text-center border-b border-amber-800/50 pb-3">
                 To My Darling
@@ -152,10 +137,7 @@
             </div>
         </div>
 
-        <!-- PAGE 2: DRAWN FLOWERS & FINAL SAFE HAVEN MESSAGE -->
         <div id="page2" class="amber-parchment w-full max-w-xl p-8 md:p-10 rounded-lg relative hidden flex-col items-center text-center transform scale-95 transition-all duration-500">
-            
-            <!-- CANVAS FOR HAND-DRAWN ROSE BOUQUET -->
             <canvas id="flowerCanvas" class="mb-4"></canvas>
 
             <h3 id="flowerCaption" class="font-['Cinzel'] text-lg md:text-xl text-amber-300 opacity-0 transition-opacity duration-1000 tracking-wider">
@@ -179,7 +161,6 @@
     </div>
 
     <script>
-        // Start background music on user's first click
         let musicStarted = false;
         function ensureAudioPlaying() {
             if (!musicStarted) {
@@ -190,13 +171,12 @@
         }
         document.body.addEventListener('click', ensureAudioPlaying, { once: true });
 
-        // Fireplace Particle Animation
         const fireCanvas = document.getElementById('fireCanvas');
         const fireCtx = fireCanvas.getContext('2d');
 
         function resizeFireCanvas() {
-            fireCanvas.width = fireCanvas.offsetWidth;
-            fireCanvas.height = fireCanvas.offsetHeight;
+            fireCanvas.width = fireCanvas.offsetWidth || 300;
+            fireCanvas.height = fireCanvas.offsetHeight || 300;
         }
         window.addEventListener('resize', resizeFireCanvas);
         resizeFireCanvas();
@@ -216,7 +196,6 @@
 
         function animateFire() {
             fireCtx.clearRect(0, 0, fireCanvas.width, fireCanvas.height);
-            
             particles.forEach((p) => {
                 fireCtx.beginPath();
                 fireCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
@@ -240,12 +219,10 @@
                     p.life = Math.random() * 60 + 20;
                 }
             });
-
             requestAnimationFrame(animateFire);
         }
         animateFire();
 
-        // Open Letter Modal
         function openLetter() {
             ensureAudioPlaying();
             const modal = document.getElementById('letterModal');
@@ -263,7 +240,6 @@
             }, 500);
         }
 
-        // Transition from Letter to Flower Canvas
         function goToPage2() {
             const p1 = document.getElementById('page1');
             const p2 = document.getElementById('page2');
@@ -277,7 +253,6 @@
             }, 300);
         }
 
-        // ORGANIC ROSE BOUQUET DRAWING ANIMATION
         function startRoseDrawing() {
             const canvas = document.getElementById('flowerCanvas');
             const ctx = canvas.getContext('2d');
@@ -288,26 +263,22 @@
             ctx.lineWidth = 2.5;
             ctx.lineCap = 'round';
 
-            // Draw Curved Stems
             function drawStems() {
                 let progress = 0;
                 const timer = setInterval(() => {
                     progress += 0.05;
                     ctx.strokeStyle = '#3a5a40';
                     
-                    // Center stem
                     ctx.beginPath();
                     ctx.moveTo(160, 300);
                     ctx.quadraticCurveTo(160, 220, 160, 150);
                     ctx.stroke();
 
-                    // Left stem
                     ctx.beginPath();
                     ctx.moveTo(160, 300);
                     ctx.quadraticCurveTo(130, 230, 110, 160);
                     ctx.stroke();
 
-                    // Right stem
                     ctx.beginPath();
                     ctx.moveTo(160, 300);
                     ctx.quadraticCurveTo(190, 230, 210, 160);
@@ -321,7 +292,6 @@
                 }, 30);
             }
 
-            // Draw Ribbon Bow
             function drawRibbon() {
                 ctx.strokeStyle = '#d4a373';
                 ctx.fillStyle = 'rgba(212, 163, 115, 0.3)';
@@ -339,28 +309,25 @@
                 ctx.stroke();
             }
 
-            // Draw Detailed Rose Blossoms
             function drawRoses() {
                 const rosePositions = [
-                    { x: 160, y: 130, r: 28 }, // Center
-                    { x: 110, y: 145, r: 24 }, // Left
-                    { x: 210, y: 145, r: 24 }, // Right
-                    { x: 135, y: 110, r: 22 }, // Upper Left
-                    { x: 185, y: 110, r: 22 }  // Upper Right
+                    { x: 160, y: 130, r: 28 },
+                    { x: 110, y: 145, r: 24 },
+                    { x: 210, y: 145, r: 24 },
+                    { x: 135, y: 110, r: 22 },
+                    { x: 185, y: 110, r: 22 }
                 ];
 
                 let roseIdx = 0;
 
                 function drawNextRose() {
                     if (roseIdx >= rosePositions.length) {
-                        // Reveal Caption
                         setTimeout(() => {
                             const caption = document.getElementById('flowerCaption');
                             caption.classList.remove('opacity-0');
                             caption.classList.add('opacity-100');
                         }, 500);
 
-                        // Reveal Final Message after 3 seconds
                         setTimeout(() => {
                             const finalMsg = document.getElementById('finalMessage');
                             finalMsg.classList.remove('opacity-0');
@@ -381,7 +348,6 @@
                         ctx.stroke();
                         ctx.fill();
 
-                        // Inner Petal Swirls
                         ctx.strokeStyle = '#ff758f';
                         ctx.beginPath();
                         ctx.arc(rose.x - 2, rose.y - 2, (rose.r / 6) * (layer + 1), 0.5, Math.PI * 1.5);
